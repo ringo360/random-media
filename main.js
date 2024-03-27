@@ -6,6 +6,7 @@ const app = express();
 //!=======[SETTINGS]=======
 
 const port = 3000;
+const useXffHeader = true;
 
 //!=======[SETTINGS]=======
 
@@ -20,7 +21,7 @@ function getRandomImage() {
 
 app.use((req, res, next) => {
 	const now = new Date();
-	const clientIP = req.ip; // クライアントのIPを取得
+	const clientIP = useXffHeader ? req.headers['x-forwarded-for'] : req.ip; // クライアントのIPを取得
 	const requestInfo = `${req.method} ${decodeURIComponent(req.originalUrl)}`; // リクエストのメソッドとURL
 	const userAgent = req.headers['user-agent'];
 	console.log(`[${now.toLocaleString()}] - Client IP: ${clientIP}, Request: ${requestInfo}, UA: ${userAgent}`);
